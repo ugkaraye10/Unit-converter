@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CE LAB UTILITY v2.0</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&family=Orbitron:wght@400;700;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header>
+        <div class="logo-group">
+            <div class="logo-title">⬡ CE-LAB UTILITY</div>
+            <div class="logo-sub">v2.0 // Computer Engineering Toolkit</div>
+        </div>
+        <div class="status-bar">
+            <div class="status-item"><span class="status-dot"></span>SYSTEM OK</div>
+            <div class="status-item"><span class="status-dot amber"></span>ALL MODULES LOADED</div>
+            <div class="status-item"><span class="status-dot blue"></span>LIVE COMPUTE</div>
+        </div>
+    </header>
+
+    <main>
+        <div class="card span-2">
+            <div class="card-header">
+                <div class="card-icon">⊞</div>
+                <div>
+                    <div class="card-title">Logic Gate — Number Base Converter</div>
+                    <div class="prompt-line">Enter any value; all bases update instantly <span class="cursor"></span>
+                    </div>
+                </div>
+                <div class="card-id">MOD-01</div>
+            </div>
+            <div class="card-body">
+                <div class="bit-toggle">
+                    <button class="bit-btn active" id="btn8" onclick="setBits(8)">8-BIT</button>
+                    <button class="bit-btn" id="btn16" onclick="setBits(16)">16-BIT</button>
+                    <button class="bit-btn" id="btnfull" onclick="setBits(0)">FULL RANGE</button>
+                </div>
+                <div class="row-2">
+                    <div class="field">
+                        <label>Decimal (Base-10)</label>
+                        <input type="number" id="dec" placeholder="e.g. 255" oninput="fromDec(this.value)">
+                    </div>
+                    <div class="field">
+                        <label>Binary (Base-2)</label>
+                        <input type="text" id="bin" placeholder="e.g. 11111111" oninput="fromBin(this.value)">
+                    </div>
+                    <div class="field">
+                        <label>Hexadecimal (Base-16)</label>
+                        <input type="text" id="hex" placeholder="e.g. FF" oninput="fromHex(this.value)">
+                    </div>
+                    <div class="field">
+                        <label>Octal (Base-8)</label>
+                        <input type="text" id="oct" placeholder="e.g. 377" oninput="fromOct(this.value)">
+                    </div>
+                </div>
+                <div id="conv-error" class="error-text" style="display:none"></div>
+                <div class="multi-results" id="conv-results" style="display:none">
+                    <div class="mini-result">
+                        <div class="mini-result-label">DEC</div>
+                        <div class="mini-result-val" id="r-dec">—</div><button class="mini-copy"
+                            onclick="copyVal('r-dec')">⎘</button>
+                    </div>
+                    <div class="mini-result">
+                        <div class="mini-result-label">HEX</div>
+                        <div class="mini-result-val hex" id="r-hex">—</div><button class="mini-copy"
+                            onclick="copyVal('r-hex')">⎘</button>
+                    </div>
+                    <div class="mini-result">
+                        <div class="mini-result-label">OCT</div>
+                        <div class="mini-result-val oct" id="r-oct">—</div><button class="mini-copy"
+                            onclick="copyVal('r-oct')">⎘</button>
+                    </div>
+                    <div class="mini-result" style="grid-column:span 2">
+                        <div class="mini-result-label">BINARY</div>
+                        <div class="mini-result-val bin" id="r-bin">—</div><button class="mini-copy"
+                            onclick="copyVal('r-bin')">⎘</button>
+                    </div>
+                </div>
+                <div class="info-note" id="bit-note"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-icon">⚡</div>
+                <div>
+                    <div class="card-title">Ohm's Law Calculator</div>
+                    <div class="prompt-line">Fill any 2 fields → 3rd solved</div>
+                </div>
+                <div class="card-id">MOD-02</div>
+            </div>
+            <div class="card-body">
+                <div
+                    style="text-align:center; font-family:var(--font-display); font-size:28px; color:var(--amber); margin-bottom:14px;">
+                    V = I × R</div>
+                <div class="ohm-triangle">
+                    <div class="field"><label>Voltage (V)</label><input type="number" id="ohm-V"
+                            oninput="solveOhm('V')"></div>
+                    <div class="field"><label>Current (I)</label><input type="number" id="ohm-I"
+                            oninput="solveOhm('I')"></div>
+                    <div class="field"><label>Resistance (R)</label><input type="number" id="ohm-R"
+                            oninput="solveOhm('R')"></div>
+                    <div class="field"><label>Power (P)</label><input type="number" id="ohm-P" readonly
+                            style="opacity:0.6"></div>
+                </div>
+                <div id="ohm-result" class="result-box" style="display:none">
+                    <span class="result-label">RESULT</span><span class="result-value amber"
+                        id="ohm-result-val">—</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-icon">▦</div>
+                <div>
+                    <div class="card-title">Resistor Decoder</div>
+                    <div class="prompt-line">Select 4 bands</div>
+                </div>
+                <div class="card-id">MOD-03</div>
+            </div>
+            <div class="card-body">
+                <div class="resistor-visual">
+                    <div class="res-wire"></div>
+                    <div class="res-body" id="res-body">
+                        <div class="res-band" id="rb1"></div>
+                        <div style="background:#c8a96e;flex:0.3"></div>
+                        <div class="res-band" id="rb2"></div>
+                        <div style="background:#c8a96e;flex:0.3"></div>
+                        <div class="res-band" id="rb3"></div>
+                        <div style="background:#c8a96e;flex:0.5"></div>
+                        <div class="res-band tolerance" id="rb4"></div>
+                    </div>
+                    <div class="res-wire"></div>
+                </div>
+                <div class="color-select-row">
+                    <div class="color-select-group">
+                        <div class="color-preview" id="prev1"></div><select id="band1" onchange="decodeResistor()">
+                            <option value="0">Black</option>
+                            <option value="1" selected>Brown</option>
+                            <option value="2">Red</option>
+                            <option value="3">Orange</option>
+                            <option value="4">Yellow</option>
+                            <option value="5">Green</option>
+                            <option value="6">Blue</option>
+                            <option value="7">Violet</option>
+                            <option value="8">Grey</option>
+                            <option value="9">White</option>
+                        </select>
+                    </div>
+                    <div class="color-select-group">
+                        <div class="color-preview" id="prev2"></div><select id="band2" onchange="decodeResistor()">
+                            <option value="0">Black</option>
+                            <option value="1">Brown</option>
+                            <option value="2" selected>Red</option>
+                            <option value="3">Orange</option>
+                            <option value="4">Yellow</option>
+                            <option value="5">Green</option>
+                            <option value="6">Blue</option>
+                            <option value="7">Violet</option>
+                            <option value="8">Grey</option>
+                            <option value="9">White</option>
+                        </select>
+                    </div>
+                    <div class="color-select-group">
+                        <div class="color-preview" id="prev3"></div><select id="band3" onchange="decodeResistor()">
+                            <option value="1">Black ×1</option>
+                            <option value="10">Brown ×10</option>
+                            <option value="100" selected>Red ×100</option>
+                            <option value="1000">Orange ×1k</option>
+                            <option value="10000">Yellow ×10k</option>
+                            <option value="100000">Green ×100k</option>
+                            <option value="1000000">Blue ×1M</option>
+                            <option value="0.1">Gold ×0.1</option>
+                        </select>
+                    </div>
+                    <div class="color-select-group">
+                        <div class="color-preview" id="prev4"></div><select id="band4" onchange="decodeResistor()">
+                            <option value="±1%">Brown ±1%</option>
+                            <option value="±5%" selected>Gold ±5%</option>
+                            <option value="±10%">Silver ±10%</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="result-box">
+                    <span class="result-label">Ω</span><span class="result-value" id="res-result">1,200 Ω</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-icon">⇄</div>
+                <div>
+                    <div class="card-title">Data Unit Scaler</div>
+                    <div class="prompt-line">Convert Storage</div>
+                </div>
+                <div class="card-id">MOD-04</div>
+            </div>
+            <div class="card-body">
+                <div class="unit-row">
+                    <div class="field"><label>Value</label><input type="number" id="data-val" oninput="scaleData()">
+                    </div>
+                    <div class="arrow-mid">→</div>
+                    <div class="field"><label>Result</label><input type="text" id="data-result" readonly></div>
+                </div>
+                <div class="row-2">
+                    <select id="data-from" onchange="scaleData()">
+                        <option value="mbit">Megabit (Mb)</option>
+                        <option value="mb">Megabyte (MB)</option>
+                    </select>
+                    <select id="data-to" onchange="scaleData()">
+                        <option value="mb" selected>Megabyte (MB)</option>
+                        <option value="gb">Gigabyte (GB)</option>
+                    </select>
+                </div>
+                <div class="result-box">
+                    <span class="result-label">SCALED</span><span class="result-value blue" id="data-display">Enter
+                        value</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-line">[ ALL SYSTEMS OPERATIONAL ]</div>
+        <div>CE LAB UTILITY v2.0 // Mobile-optimized</div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
